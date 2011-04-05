@@ -6,11 +6,11 @@ SenseUnit: A simple unit conversion userscript
 It will parse all text on all webpages, converting from imperial units to metric.
 
 ## Version
-0.1.0
+0.1.2
 
 ## Installation
 
-Click on [senseunit.user.js](/linus/senseunit/raw/0.1.1/senseunit.user.js)
+Click on [senseunit.user.js](/linus/senseunit/raw/0.1.2/senseunit.user.js)
 
 ## Credits
 
