@@ -32,12 +32,12 @@ units =
   "stone(?:s)?":                [6.35029318,    "kg"]
   # Temperature
   "°F":                         (str, number, offset, s) ->
-                                  5 / 9 * (parseFloat(number) - 32) + " °C"
+                                  Math.round(5 / 9 * (parseFloat(number) - 32) * 10) / 10 + " °C"
 
 regex = {}
 
 for matcher of units
-  regex[matcher] = new RegExp("([\\d\\.,]+)\\s*#{matcher}", "g")
+  regex[matcher] = new RegExp("(\\d+[\\d\\., ]*)\\s*#{matcher}", "gi")
 
 converter = (conversion) ->
   return conversion if conversion instanceof Function
@@ -45,17 +45,27 @@ converter = (conversion) ->
   [factor, unit] = conversion
 
   (str, number, offset, s) ->
-    converted = Math.round(parseFloat(number) * factor * 10) / 10
-    converted + " " + unit
+    converted = Math.round(parseFloat(number.replace(" ", "")) * factor * 10) / 10
+
+    "#{converted} #{unit}"
+
+convert = (text) ->
+  converted = text
+  for matcher, conversion of units
+    converted = converted.replace(regex[matcher], converter(conversion))
+
+  return converted
 
 textnodes = document.evaluate "//text()", document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null
 
 i = textnodes.snapshotLength
 while i--
   node = textnodes.snapshotItem(i)
-  s = node.data
 
-  for matcher, conversion of units
-    s = s.replace(regex[matcher], converter(conversion))
+  node.data = convert(node.data)
 
-  node.data = s
+test = ->
+  assertEqual = (a, b) ->
+    throw new Error("#{a} != #{b}") if a isnt b
+
+  assertEqual(convert("jag är 100 feet lång"), "jag är 304.8 dm lång")
