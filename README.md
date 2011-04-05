@@ -10,7 +10,7 @@ It will parse all text on all webpages, converting from imperial units to metric
 
 ## Installation
 
-Click on `senseunit.user.js`
+Click on [senseunit.user.js](/linus/senseunit/raw/0.1.1/senseunit.user.js)
 
 ## Credits
 
